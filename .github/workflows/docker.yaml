@@ -12,6 +12,16 @@ jobs:
         # action to use hadolint for linting the Dockerfile
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.5.0
+build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    needs: lint # wait for lint to complete successfully
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v7
+      # action to login to GitHub container registry
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io # address to GitHub container registry
           username: ${{ github.actor }} # the user triggering the workflow
@@ -23,3 +33,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.actor }}/greeter:latest
+
